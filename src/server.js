@@ -1,16 +1,15 @@
 import express from "express"
-import * as dotenv from 'dotenv'
-dotenv.config()
+import {serverSettings} from "./configs/config"
+
+const apis = require("./apis")
+const {port} = serverSettings
 const app = express()
-const port = process.env.PORT
 
 app.use(express.urlencoded());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send("Hello word")
-})
+apis(app)
 
 app.listen(port, () => {
-    console.log('server is running on ' + port)
+  console.log('server is running on ' + port)
 })
