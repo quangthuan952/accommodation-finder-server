@@ -1,5 +1,5 @@
 import {serverSettings} from "../configs/config"
-import {postController} from "../controller/index"
+import {postController} from "../controllers/index"
 
 const {basePath} = serverSettings
 
