@@ -2,63 +2,50 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Accounts', {
+    await queryInterface.createTable('Questions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      username: {
+      question: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      phoneNumber: {
-        type: Sequelize.STRING,
+      answer: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      avatar: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      uid: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      imageCover: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      role: {
+      topic: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      from: {
+      questionerId: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      displayName: {
+      respondentId: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       isActive: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      status: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      updatedAt: {
+      }, updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   }, async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Accounts');
+    await queryInterface.dropTable('Questions');
   }
 };

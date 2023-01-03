@@ -8,7 +8,7 @@ const cors = require('cors')
 const app = express()
 
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({origin: '*'}))
 app.use(express.urlencoded());
 app.use(express.json());
 

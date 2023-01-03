@@ -6,11 +6,11 @@ require("dotenv").config()
 
 function generateToken(user) {
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '30s'
+        expiresIn: '60m'
     })
 
     const refreshToken = jwt.sign(user, process.env.REFRESH_ACCESS_TOKEN_SECRET, {
-            expiresIn: '60m'
+            expiresIn: '24h'
         }
     )
     return {accessToken, refreshToken}
@@ -20,14 +20,17 @@ const authController = {
     async login(req, res) {
         const {token} = req.body
         const decodedToken = jwt.decode(token)
-        const userData = {
-            displayName: decodedToken.name,
-            email: decodedToken.email,
-            phoneNumber: null,
-            from: "Google",
-            uid: decodedToken.user_id,
-            avatar: decodedToken.picture,
-        };
+        let userData = {}
+        if(decodedToken) {
+            userData = {
+                displayName: decodedToken.name,
+                email: decodedToken.email,
+                phoneNumber: null,
+                from: "Google",
+                uid: decodedToken.user_id,
+                avatar: decodedToken.picture,
+            };
+        }
         if (Date.now() < decodedToken.exp * 1000) {
             try {
                 const user = await db.Account.findOne({where: {uid: userData.uid}})
