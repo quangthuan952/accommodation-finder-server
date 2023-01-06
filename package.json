@@ -12,6 +12,8 @@
     "@babel/core": "^7.20.2",
     "@babel/node": "^7.20.2",
     "@babel/preset-env": "^7.20.2",
+    "body-parser": "^1.20.1",
+    "cloudinary": "^1.33.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
