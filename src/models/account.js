@@ -5,7 +5,8 @@ const {
 module.exports = (sequelize, DataTypes) => {
     class Account extends Model {
         static associate(models) {
-           
+           Account.hasOne(models.User, {foreignKey: 'accountId', as: 'userData'})
+           Account.hasOne(models.Post, {foreignKey: 'userId', as: 'user'})
         }
     }
 

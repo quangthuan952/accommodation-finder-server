@@ -12,6 +12,9 @@ const verifyToken = (req, res, next) =>  {
             req.user = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
             next()
         }catch (e) {
+            if (e.name === "TokenExpiredError") {
+                return res.sendStatus(httpCodes.TOKEN_EXPIRED)
+            }
             return res.sendStatus(httpCodes.INVALID_ACCESS_TOKEN)
         }
     }
@@ -32,6 +35,10 @@ const verifyRefreshToken = (req, res, next) =>  {
         }
     }
 }
+
+
+
+
 module.exports = {
     verifyToken,
     verifyRefreshToken

@@ -10,23 +10,34 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here
+            Post.belongsTo(models.Account, {foreignKey: 'userId', as: 'user'})
+
         }
     }
 
     Post.init({
         title: DataTypes.STRING,
+        lane: DataTypes.STRING,
+        street: DataTypes.STRING,
+        houseNumber: DataTypes.STRING,
+        area: DataTypes.FLOAT,
+        price: DataTypes.FLOAT,
+        deposit: DataTypes.FLOAT,
+        province: DataTypes.STRING,
+        ward: DataTypes.STRING,
+        district: DataTypes.STRING,
+        isStayWithHost: DataTypes.INTEGER,
+        isPrivateToilet: DataTypes.INTEGER,
+        isFurniture: DataTypes.INTEGER,
+        images: DataTypes.TEXT,
+        video: DataTypes.STRING,
+        userId: DataTypes.STRING,
+        category: DataTypes.INTEGER,
         description: DataTypes.TEXT,
-        content: DataTypes.TEXT,
-        thumbnail: DataTypes.STRING,
-        address: DataTypes.STRING,
-        price: DataTypes.DOUBLE,
-        area: DataTypes.STRING,
-        furniture: DataTypes.STRING,
+        specificAddress: DataTypes.STRING,
         status: DataTypes.INTEGER,
         isActive: DataTypes.BOOLEAN,
         type: DataTypes.INTEGER,
-        category: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'Post',
