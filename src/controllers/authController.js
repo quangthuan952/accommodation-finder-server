@@ -29,27 +29,29 @@ const authController = {
                    phoneNumber: decodedToken.phone_number,
                    from:decodedToken.sign_in_provider,
                    uid: decodedToken.user_id,
-                   avatar: decodedToken.picture,
+                   avatar: decodedToken.picture || 'https://res.cloudinary.com/dqrn1uojt/image/upload/v1673227384/avatar_default_lqsou9.png',
                };
            }
            if (Date.now() < decodedToken.exp * 1000) {
                try {
-                   const user = await db.Account.findOne({where: {uid: userData.uid}
+                   const account = await db.Account.findOne({where: {uid: userData.uid}
+
                    })
                    let userRes = {}
                    let tokens = {}
-                   if (!user) {
+                   if (!account) {
                        const userDb = await db.Account.create({...userData})
                        userRes = {...userData, id: userDb.id}
                        tokens = generateToken(userRes)
+                      await db.User.create({accountId: userDb.id})
                    }
                    else {
-                       userRes = {...userData, id: user.id}
+                       userRes = {...userData, id: account.id}
                        tokens = generateToken(userRes)
                    }
                    return res
                        .status(httpCodes.SUCCESS)
-                       .json({user: {...userData}, ...tokens })
+                       .json({account: {...userData}, ...tokens })
                } catch (e) {
                    console.log(e)
                    return res.status(httpCodes.UNKNOWN_ERROR)

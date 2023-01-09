@@ -11,7 +11,7 @@ module.exports = (app) => {
   app.put(`/post/:id`, postController.updatePost)
   app.get(`/postsByUser`, postController.getPostByUser)
   app.get(`/postsByProvince`, postController.getPostByProvince)
-  app.get(`/filterPost`, postController.filterPost)
+  app.post(`/filterPost`, postController.filterPost)
   app.get(`/sortPost`, postController.sortPost)
   app.post(`/approvePost/:id`,verifyToken, postController.approvePost)
 }

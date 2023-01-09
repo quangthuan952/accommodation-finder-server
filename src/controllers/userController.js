@@ -8,28 +8,32 @@ const getAccountData = async (id) => {
 const userController = {
     async getProfile(req, res) {
         const {user} = req
-        console.log('user',user)
         try {
             const accountData = await getAccountData(user.id)
-            switch (accountData.role) {
-                case 0: {
-                    try {
-                        const userData = await db.User.findOne({where: {accountId: accountData.id},
-                            attributes: ['bio', 'balance', 'address', 'id']
-                        })
-                        return res.status(httpCodes.SUCCESS).json({...accountData, ...userData})
-                    }
-                    catch (e) {
-                        return res.sendStatus(httpCodes.BAD_REQUEST)
-                    }
-                }
-                // case 1: {
-                //
-                // }
-                case 2: {
-                    return res.status(httpCodes.SUCCESS).json({...accountData})
-                }
-            }
+            console.log('accountData.role', accountData.role)
+            let roleTemp = accountData.role + 1
+          if(roleTemp) {
+              switch (roleTemp) {
+                  case 1: {
+                      console.log('vafo 0')
+                      try {
+                          const userData = await db.User.findOne({where: {accountId: accountData.id},
+                              attributes: ['bio', 'balance', 'address', 'id']
+                          })
+                          return res.status(httpCodes.SUCCESS).json({...accountData, ...userData})
+                      }
+                      catch (e) {
+                          return res.sendStatus(httpCodes.BAD_REQUEST)
+                      }
+                  }
+                  // case 1: {
+                  //
+                  // }
+                  case 3: {
+                      return res.status(httpCodes.SUCCESS).json({...accountData})
+                  }
+              }
+          }
             //     include: [
             //         {model: db.User, as: 'userData', attributes: ['id', 'address', 'balance', 'bio', 'accountId']}
             //     ],
