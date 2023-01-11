@@ -17,7 +17,7 @@ export const getComment = async (req, res) => {
   const {postId} = req.params
   if (postId) {
     try {
-      const comments = await db.Comment.findAll({where: {postId}})
+      const comments = await db.Comment.findAll({where: {postId}, order: [['createdAt', 'DESC']]})
       res.status(httpCodes.SUCCESS).json(comments)
     } catch (e) {
       res.sendStatus(httpCodes.UNKNOWN_ERROR)
