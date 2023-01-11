@@ -15,9 +15,10 @@ export const createPost = async (req, res) => {
       })
       return res.status(httpCodes.CREATED).json({post: post})
     } catch (e) {
-      console.log('e', e)
+      console.log(e)
     }
   } catch (e) {
+    console.log(e)
     return res.sendStatus(httpCodes.UNKNOWN_ERROR)
   }
 }
