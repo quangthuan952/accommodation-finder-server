@@ -86,8 +86,10 @@ export const getPostById = async (req, res) => {
       raw: true,
       nest: true
     });
-    const postData = {...post, images: JSON.parse(post.images.split(','))}
-    return res.status(httpCodes.SUCCESS).json(postData)
+    if(post) {
+      const postData = {...post, images: JSON.parse(post.images.split(','))}
+      return res.status(httpCodes.SUCCESS).json(postData)
+    }
   } catch (e) {
     console.log('e', e)
   }
