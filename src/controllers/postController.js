@@ -32,6 +32,7 @@ export const getAllApprovalPost = async (req, res) => {
       include: [
         {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
       ],
+      order: [['createdAt', 'DESC']],
       raw: true,
       nest: true
     })
@@ -56,6 +57,7 @@ export const getAllPost = async (req, res) => {
       include: [
         {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
       ],
+      order: [['createdAt', 'DESC']],
       raw: true,
       nest: true
     })
@@ -151,91 +153,64 @@ export const getPostByUser = async (req, res) => {
 export const filterPost = async (req, res) => {
   
   let {body} = req
-  body.status =   {
-    [Op.ne]: 0,
-  }
-  let type = []
-  let price = []
+  // body.status =   {
+  //   [Op.ne]: 0,
+  // }
   if(body.type) {
-    type = {
-      [Op.in]: body.type
-    }
-    body.type = {...type}
+    body.type = {...{[Op.in]: body.type}}
   }
   
   if(body.price) {
-    price = {
-      [Op.between]: [body.price.min, body.price.max]
-    }
-    body.price = {...price}
+    body.price = {...{ [Op.between]: [body.price.min, body.price.max]}}
   }
   if(body.area) {
     body.area = {...{ [Op.between]: [body.area.min, body.area.max]}}
   }
   
+  const {isSort} = body
   let allPost = null
-  if (body.isSort) {
-    console.log('body.isSort',body.isSort)
-    switch (body.isSort) {
+  if (isSort) {
+    delete body.isSort
+    switch (isSort) {
       case  1: {
-        delete body.isSort
         allPost = await db.Post.findAll({
           where: {...body},
           include: [
             {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
           ],
-          
+          order: [['createdAt', 'DESC']],
           raw: true,
           nest: true
         })
         break
       }
-      case 2: {
-        delete body.isSort
-        
-        allPost = await db.Post.findAll({
-          where: {...body},
-          include: [
-            {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
-          ],
-          order: [
-            ['price', 'ASC'],
-          ],
-          raw: true,
-          nest: true
-        })
-        break
+      default: {
+          allPost = await db.Post.findAll({
+            where: {...body},
+            include: [
+              {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
+            ],
+            order: [
+              ['price', isSort === 2 ? 'ASC': 'DESC'],
+            ],
+            raw: true,
+            nest: true
+          })
+        }
       }
-      case 3: {
-        delete body.isSort
-        
-        allPost = await db.Post.findAll({
-          where: {...body},
-          include: [
-            {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
-          ],
-          order: [
-            ['price', 'DESC'],
-          ],
-          raw: true,
-          nest: true
-        })
-      }
-    }
   }
   
   else {
     allPost = await db.Post.findAll({
-      where: {...body
-      },
+      where: {...body},
       include: [
         {model: db.Account, as: 'user', attributes: ['avatar', 'displayName', 'phoneNumber']}
       ],
-      
       raw: true,
       nest: true
     })
   }
+  
   if (allPost) {
     const postData = allPost.map((post) => {
       return {
